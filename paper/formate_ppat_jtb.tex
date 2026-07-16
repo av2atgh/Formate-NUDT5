@@ -371,6 +371,50 @@ essentially unchanged by the glue; PRPP is drawn down in the knockout, matching
 \label{fig:scan}
 \end{figure}
 
+\subsection{The glue is a dual sensor: the AMP arm reports energy charge}
+\label{sec:dualsensor}
+
+That $\theta$ is near-constant across the one-carbon scan reflects the regime the
+model occupies, not an intrinsic inertness of the feedback. The free AMP that the
+glue senses is not a free parameter: it is fixed by the adenylate kinase
+equilibrium $[\mathrm{AMP}][\mathrm{ATP}]=K[\mathrm{ADP}]^2$, so it is low when
+the energy charge is high. In the proliferating, formate-replete state
+($\mathrm{EC}\approx0.95$) free AMP is $2$--$13\,\mu$M, well below $K_a=56\,\mu$M,
+and the AMP-sensing arm of Eq.~\eqref{eq:theta} is silent; $\theta$ is set by the
+competing PRPP term alone. This is a property of the energy state, not of the
+glue.
+
+Lowering the energy charge --- by reducing the ATP-supply capacity at fixed
+one-carbon supply --- raises free AMP steeply (Fig.~\ref{fig:ec}a). It crosses
+$K_a$ near $\mathrm{EC}\approx0.84$ and reaches $222\,\mu$M at
+$\mathrm{EC}\approx0.71$, engaging the AMP arm and driving $\theta$ from $21\%$ to
+above $50\%$ (Fig.~\ref{fig:ec}b). The glue is therefore a \emph{dual sensor}:
+substrate-gated through PRPP at high energy charge --- the regime of the AICAR
+prediction above --- and energy-gated through AMP once the energy charge falls.
+Because the AMP arm and AMPK read the same rising free AMP, the glue shuts down
+the ATP- and PRPP-consuming purine pathway under exactly the conditions that
+activate AMPK (\S\ref{sec:ampk}), a coherent energy-conservation response.
+
+This also resolves an apparent tension with measured nucleotide levels. The free
+AMP of the model ($2$--$13\,\mu$M) is far below the total AMP reported by
+metabolomics ($10^2$--$10^3\,\mu$M), but the two are different quantities: the
+glue constants were measured against free AMP, whereas metabolomics reports
+total, largely protein-bound AMP. A free AMP as high as $100$--$300\,\mu$M would
+require an energy charge near $0.7$ (Fig.~\ref{fig:ec}a), i.e.\ an energy-stressed
+rather than a proliferating state.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig4_energy_charge.pdf}
+\caption{The AMP arm of the glue is an energy-charge sensor. Free AMP is fixed by
+the adenylate kinase equilibrium and rises steeply as the energy charge falls
+(a), crossing the glue affinity $K_a$ and driving the inhibited fraction $\theta$
+from its PRPP-set floor towards saturation (b). The gold band marks the
+proliferating, high-energy-charge regime in which the AICAR prediction is
+evaluated and the AMP arm is silent.}
+\label{fig:ec}
+\end{figure}
+
 \section{Proposed experiments}
 \label{sec:exp}
 
@@ -482,13 +526,17 @@ stratify both.
 \subsection{Limitations}
 
 The model is minimal by design. Its free AMP is an output of the adenylate kinase
-equilibrium and is structurally low ($2$--$13~\mu$M); were free AMP nearer
-$100$--$300~\mu$M in these cells, the glue's AMP arm would engage and the
-near-constant-$\theta$ regime would not hold. This single quantity, obtainable
-from existing adenine-nucleotide data, would most change the analysis. Nine of the
-thirteen added parameters are assumed, and the absolute AICAR level is
-consequently unconstrained (\S\ref{sec:sens}); only its sign and shape are
-predicted. The glue also accepts IMP, GMP and AICAR itself as ligands
+equilibrium and is structurally low ($2$--$13~\mu$M), which places the AICAR
+prediction in the PRPP-gated, energy-charge-silent regime (\S\ref{sec:dualsensor}).
+This is a scoping condition rather than an unconstrained assumption: free AMP is
+fixed by the equilibrium and the high energy charge of proliferating cells, and
+the AMP arm engages only once the energy charge falls, so the prediction is
+stated for the high-energy-charge state and would need re-evaluation under energy
+stress. The relevant test is the adenylate energy charge, obtainable from
+existing nucleotide data, bearing in mind that metabolomics reports total rather
+than free AMP. Nine of the thirteen added parameters are assumed, and the
+absolute AICAR level is consequently unconstrained (\S\ref{sec:sens}); only its
+sign and shape are predicted. The glue also accepts IMP, GMP and AICAR itself as ligands
 \citep{witus2026}, which we do not model --- an AICAR-sensitive glue would be
 self-reinforcing at low one-carbon supply and could sharpen the predicted
 excursion. Finally, PPAT--NUDT5 controls purine synthesis; neither source reports

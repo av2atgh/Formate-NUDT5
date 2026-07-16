@@ -80,6 +80,29 @@ for axi, (col, lab, logy) in zip(axes.ravel(), panels):
 axes.ravel()[0].legend(frameon=False, fontsize=6)
 fig.tight_layout(); fig.savefig('fig3_scan.pdf'); plt.close(fig)
 
-print('wrote fig1_calibration.pdf fig2_aicar_prediction.pdf fig3_scan.pdf')
+# ---------------------------------------------------------------- Figure 4
+# free AMP and glue occupancy versus adenylate energy charge
+ec = M.energy_charge_scan()
+ec = ec[ec.converged].sort_values('energy_charge')
+fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.7))
+ax[0].plot(ec.energy_charge, ec.amp * 1000, '-', color='crimson', lw=1.6)
+ax[0].axhline(M.Ka * 1000, ls=':', color='k', lw=.9)
+ax[0].text(ec.energy_charge.min(), M.Ka * 1000 * 1.15, '$K_a$', fontsize=7)
+ax[0].axvspan(0.90, 0.96, color='gold', alpha=.35, lw=0)
+ax[0].text(0.93, ec.amp.min() * 1000 * 2, 'proliferating', ha='center',
+           fontsize=6, color='#8a6d00', rotation=90)
+ax[0].set(xlabel='adenylate energy charge', ylabel='free [AMP] (µM)', yscale='log')
+ax[0].invert_xaxis()
+ax[0].set_title('a', loc='left', fontweight='bold')
+ax[1].plot(ec.energy_charge, 100 * ec.theta, '-', color='#1f77b4', lw=1.6)
+ax[1].axvspan(0.90, 0.96, color='gold', alpha=.35, lw=0)
+ax[1].set(xlabel='adenylate energy charge', ylabel=r'$\theta$ (PPAT inhibited, %)',
+          ylim=(0, 100))
+ax[1].invert_xaxis()
+ax[1].set_title('b', loc='left', fontweight='bold')
+fig.tight_layout(); fig.savefig('fig4_energy_charge.pdf'); plt.close(fig)
+
+print('wrote fig1_calibration.pdf fig2_aicar_prediction.pdf fig3_scan.pdf '
+      'fig4_energy_charge.pdf')
 print(f'AICAR WT: {on.aic.iloc[0]:.3f} -> {on.aic.max():.3f} -> {on.aic.iloc[-1]:.3f}')
 print(f'AICAR KO: {ko.aic.iloc[0]:.3f} -> {ko.aic.max():.3f} -> {ko.aic.iloc[-1]:.3f}')

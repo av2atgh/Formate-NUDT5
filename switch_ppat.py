@@ -338,6 +338,35 @@ def check_hysteresis(df):
     return float(np.max(np.abs(df.atp_fwd - df.atp_bwd) / (df.atp_bwd.abs() + 1e-12)))
 
 
+def energy_charge_scan(supply_factors=None, fSCFr=2.0, form_x=0.02,
+                       fSC10THF_cytosol=0.0, fN=1.0):
+    """Scan the adenylate energy charge by scaling the ATP-supply capacity.
+
+    Free AMP is fixed by the adenylate kinase equilibrium, so it is low at high
+    energy charge and rises steeply as energy charge falls. This scan reduces the
+    glycolytic and oxidative-phosphorylation capacities (eg, eo) together by a
+    common factor, at fixed one-carbon supply, and records where free AMP crosses
+    the glue affinity Ka and engages the AMP-sensing arm of the feedback.
+    """
+    global eg, eo
+    if supply_factors is None:
+        supply_factors = np.linspace(1.0, 0.2, 25)
+    eg0, eo0 = eg, eo
+    rows = []
+    for sup in supply_factors:
+        eg, eo = sup * eg0, sup * eo0
+        try:
+            r, _ = solve(fSCFr, form_x, fSC10THF_cytosol, fN=fN)
+            rows.append({'supply': sup, 'amp': r['amp'], 'adp': r['adp'],
+                         'atp': r['atp'], 'energy_charge': r['energy_charge'],
+                         'amp_over_Ka': r['amp'] / Ka, 'theta': r['theta'],
+                         'mu_per_day': 24 * r['mu'], 'converged': r['converged']})
+        except Exception:                                   # pragma: no cover
+            rows.append({'supply': sup, 'converged': False})
+    eg, eo = eg0, eo0
+    return pd.DataFrame(rows)
+
+
 def sensitivity(param_names=None, factor=2.0):
     """Vary each assumed parameter up and down and report the effect.
 
@@ -416,6 +445,15 @@ if __name__ == '__main__':
     sens = sensitivity()
     sens.to_csv(os.path.join(outdir, 'sensitivity.v6.csv'), index=False)
     print(sens.to_string(index=False, float_format=lambda v: f'{v:.3g}'))
+
+    print('\nenergy-charge scan (free AMP vs energy charge; AMP arm engagement):')
+    ec = energy_charge_scan()
+    ec.to_csv(os.path.join(outdir, 'energy_charge.v6.csv'), index=False)
+    hi, lo = ec.iloc[0], ec[ec.energy_charge < 0.72].iloc[0]
+    print(f'  energy charge {hi.energy_charge:.2f}: free AMP {hi.amp*1000:.0f} uM '
+          f'({hi.amp_over_Ka:.2f} x Ka), theta {100*hi.theta:.0f}%')
+    print(f'  energy charge {lo.energy_charge:.2f}: free AMP {lo.amp*1000:.0f} uM '
+          f'({lo.amp_over_Ka:.2f} x Ka), theta {100*lo.theta:.0f}%')
 
     # the cyan (cytosolic-serine) condition, three one-carbon routings
     print('\ncyan condition (for_x=0.02, fS,CHO-THF=0.5), three routings:')
