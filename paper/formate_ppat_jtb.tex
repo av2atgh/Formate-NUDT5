@@ -121,6 +121,36 @@ synthesis has no independent kinetics; it is defined as demand, and the free
 adenine pool adjusts to satisfy Eq.~\eqref{eq:demand}. All parameters and their
 literature sources are retained from \citet{oizel2020}.
 
+\subsection{A correction to the formate balance}
+\label{sec:correction}
+
+We take this opportunity to correct an error in the published implementation,
+which we adopt in the corrected form throughout. The specification of
+\citet{oizel2020} routes the third carbon of serine to the folate pool by two
+distinct paths: the mitochondrial path, in which serine is oxidised to free
+formate that is then condensed onto tetrahydrofolate by FTHFS, and the cytosolic
+path, in which SHMT1 produces CH$_2$-tetrahydrofolate directly, with no free
+formate intermediate. The cytosolic term therefore belongs in the CHO-THF
+balance and not in the formate balance. In the published code, however, it is
+added to the formate balance, so that cytosolic serine catabolism is made to act
+as a source of free formate.
+
+The consequence is not cosmetic. Routing cytosolic flux through the formate pool
+inflates the predicted intracellular formate and moves the formate overflow
+threshold from $42\%$ to $14\%$ of the FTHFS rate (Fig.~\ref{fig:route}), placing
+cytosolic one-carbon metabolism in the position of a formate source. This is in
+tension with the central conclusion of \citet{oizel2020} that the mitochondrial
+path is the one required for formate overflow. One might ask whether the coded
+routing is defensible as an approximation, since the FTHFS reaction is reversible
+and cytosolic CHO-THF can in principle return to formate; allowing FTHFS to run
+reversibly (Sec.~\ref{sec:extended} and Appendix~\ref{app:model}) shows that it
+cannot, as the ATP-driven reaction runs far from equilibrium
+($K_{eq}=20$--$61$; \citealp{himes1962}) and the back-flux to formate is
+negligible. We therefore adopt the corrected routing --- cytosolic serine
+catabolism into the CHO-THF balance --- as the baseline. The correction does not
+affect the central prediction of this work (Sec.~\ref{sec:prediction}), which is
+evaluated with the cytosolic path inactive.
+
 \subsection{The PPAT--NUDT5 metabolite glue}
 
 \citet{witus2026} report that the octameric PPAT$_4$--NUDT5$_4$ complex assembles
@@ -150,6 +180,7 @@ $274\pm33~\mu$M --- a $21\%$ error, with no parameter refitted
 (Fig.~\ref{fig:cal}a).
 
 \subsection{Extended model}
+\label{sec:extended}
 
 We add explicit pools for 10-formyl-tetrahydrofolate (CHO-THF), PRPP, and the two
 purine-pathway intermediates that flank the one-carbon-dependent formyl transfer
@@ -213,6 +244,7 @@ model, lying on the flat foot of the response $4$--$24\times$ below $K_a$.}
 \end{figure}
 
 \subsection{Key prediction: AICAR is coupled inversely to one-carbon availability}
+\label{sec:prediction}
 
 The extended model predicts that AICAR falls as one-carbon availability rises
 (Fig.~\ref{fig:key}a, solid). Over the scan, AICAR rises from $0.022$~mM at the
@@ -340,21 +372,6 @@ $\sim$640-fold range across the variations, since the steady-state pool is
 essentially $v_{\mathrm{PPAT}}/k_{\mathrm{deg}}$ and $k_{\mathrm{deg}}$ is
 assumed. The model predicts the \emph{sign and shape} of the AICAR response, not
 its absolute level, and the proposed experiments are framed accordingly.
-
-\subsection{A coding discrepancy in the published model}
-
-While reconciling the published code against its specification we found that the
-cytosolic serine-catabolism term is added to the formate balance rather than to
-the CHO-THF balance, routing cytosolic one-carbon flux through the formate pool.
-This inflates predicted formate and moves the formate overflow threshold from
-$42\%$ to $14\%$ of the FTHFS rate in the extended model (Fig.~\ref{fig:route}),
-placing cytosolic flux in the position of a formate source --- in tension with the
-conclusion of \citet{oizel2020} that the mitochondrial pathway is the one
-required for overflow. Making FTHFS reversible confirms that cytosolic units
-reach formate only negligibly (the reaction runs far from equilibrium at
-$K_{eq}=20$--$61$; \citealp{himes1962}), so the corrected routing, not the coded
-one, is the appropriate baseline. This does not affect the AICAR prediction, for
-which the cytosolic pathway is inactive.
 
 \begin{figure}[t]
 \centering
