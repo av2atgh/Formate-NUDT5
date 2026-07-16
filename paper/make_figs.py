@@ -80,29 +80,6 @@ for axi, (col, lab, logy) in zip(axes.ravel(), panels):
 axes.ravel()[0].legend(frameon=False, fontsize=6)
 fig.tight_layout(); fig.savefig('fig3_scan.pdf'); plt.close(fig)
 
-# ---------------------------------------------------------------- Figure 4
-# cytosolic routing / reversible FTHFS
-cyan = {}
-for nm, kw in [('code', dict(cytosolic_via_formate=True, fthfs_reversible=False)),
-               ('supp', dict(cytosolic_via_formate=False, fthfs_reversible=False)),
-               ('rev', dict(cytosolic_via_formate=False, fthfs_reversible=True))]:
-    cyan[nm] = M.scan(0.02, 0.5, fN=1.0, n=N, **kw)
-fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.6))
-sty = [('code', 'cytosolic $\\to$ formate (as coded)', '#d62728', '-'),
-       ('supp', 'cytosolic $\\to$ CHO-THF (as specified)', '#1f77b4', '--'),
-       ('rev', 'reversible FTHFS', 'k', ':')]
-for nm, lab, c, ls in sty:
-    ax[0].plot(cyan[nm].fSCFr_pct, cyan[nm].form, ls, color=c, lw=1.4, label=lab)
-    ax[1].plot(cyan[nm].fSCFr_pct, cyan[nm].ffor, ls, color=c, lw=1.4)
-ax[0].set(xlabel='serine catabolism to formate (%)', ylabel='[formate] (mM)', yscale='log')
-ax[0].legend(frameon=False, fontsize=5.6, loc='lower right')
-ax[0].set_title('a', loc='left', fontweight='bold')
-ax[1].axhline(0, color='.6', lw=.6)
-ax[1].set(xlabel='serine catabolism to formate (%)', ylabel='formate release (mM h$^{-1}$)',
-          xlim=(0, 100), ylim=(-0.05, 0.5))
-ax[1].set_title('b', loc='left', fontweight='bold')
-fig.tight_layout(); fig.savefig('fig4_routing.pdf'); plt.close(fig)
-
-print('wrote fig1_calibration.pdf fig2_aicar_prediction.pdf fig3_scan.pdf fig4_routing.pdf')
+print('wrote fig1_calibration.pdf fig2_aicar_prediction.pdf fig3_scan.pdf')
 print(f'AICAR WT: {on.aic.iloc[0]:.3f} -> {on.aic.max():.3f} -> {on.aic.iloc[-1]:.3f}')
 print(f'AICAR KO: {ko.aic.iloc[0]:.3f} -> {ko.aic.max():.3f} -> {ko.aic.iloc[-1]:.3f}')

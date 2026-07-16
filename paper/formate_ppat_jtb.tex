@@ -124,32 +124,20 @@ literature sources are retained from \citet{oizel2020}.
 \subsection{A correction to the formate balance}
 \label{sec:correction}
 
-We take this opportunity to correct an error in the published implementation,
-which we adopt in the corrected form throughout. The specification of
-\citet{oizel2020} routes the third carbon of serine to the folate pool by two
-distinct paths: the mitochondrial path, in which serine is oxidised to free
-formate that is then condensed onto tetrahydrofolate by FTHFS, and the cytosolic
-path, in which SHMT1 produces CH$_2$-tetrahydrofolate directly, with no free
-formate intermediate. The cytosolic term therefore belongs in the CHO-THF
-balance and not in the formate balance. In the published code, however, it is
-added to the formate balance, so that cytosolic serine catabolism is made to act
-as a source of free formate.
-
-The consequence is not cosmetic. Routing cytosolic flux through the formate pool
-inflates the predicted intracellular formate and moves the formate overflow
-threshold from $42\%$ to $14\%$ of the FTHFS rate (Fig.~\ref{fig:route}), placing
-cytosolic one-carbon metabolism in the position of a formate source. This is in
-tension with the central conclusion of \citet{oizel2020} that the mitochondrial
-path is the one required for formate overflow. One might ask whether the coded
-routing is defensible as an approximation, since the FTHFS reaction is reversible
-and cytosolic CHO-THF can in principle return to formate; allowing FTHFS to run
-reversibly (Sec.~\ref{sec:extended} and Appendix~\ref{app:model}) shows that it
-cannot, as the ATP-driven reaction runs far from equilibrium
-($K_{eq}=20$--$61$; \citealp{himes1962}) and the back-flux to formate is
-negligible. We therefore adopt the corrected routing --- cytosolic serine
-catabolism into the CHO-THF balance --- as the baseline. The correction does not
-affect the central prediction of this work (Sec.~\ref{sec:prediction}), which is
-evaluated with the cytosolic path inactive.
+The published implementation contains an error in the formate balance, which we
+correct here. The third carbon of serine reaches the folate pool by two paths: a
+mitochondrial path, in which serine is oxidised to free formate that FTHFS then
+condenses onto tetrahydrofolate, and a cytosolic path, in which SHMT1 produces
+CH$_2$-tetrahydrofolate directly, with no free formate intermediate. The
+cytosolic term therefore belongs in the CHO-THF balance, but in the published
+code it was placed in the formate balance, making cytosolic serine catabolism an
+artificial source of free formate. This inflates the predicted intracellular
+formate and lowers the formate overflow threshold from $42\%$ to $14\%$ of the
+FTHFS rate, contrary to the conclusion of \citet{oizel2020} that the
+mitochondrial path is the one required for overflow. We place the cytosolic term
+in the CHO-THF balance throughout. The correction does not affect the central
+prediction of this work (Sec.~\ref{sec:prediction}), which is evaluated with the
+cytosolic path inactive.
 
 \subsection{The PPAT--NUDT5 metabolite glue}
 
@@ -585,16 +573,6 @@ $[\mathrm{P}_i]$ & $5$~mM (orthophosphate) & A \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig4_routing.pdf}
-\caption{Cytosolic one-carbon routing (cyan condition,
-$f_{S,\mathrm{CHO}}=0.5$). (a)~Intracellular formate; (b)~formate release, the
-overflow threshold being the zero crossing. The reversible-FTHFS model (dotted)
-tracks the specified routing (dashed), not the coded one (solid).}
-\label{fig:route}
-\end{figure}
 
 \section*{Data availability}
 This is a theoretical study and generates no new experimental data. The published
